@@ -84,10 +84,25 @@ can see exactly *why* a spot grades the way it does.
 
 ## Backtesting against past seasons
 
+Two backtests, both leak-free (every projection uses only data available
+before that day):
+
 ```bash
-python backtest.py --year 2025
-python backtest.py --year 2026                       # season to date
-python backtest.py --year 2025 --start 2025-06-01 --end 2025-09-28
+python backtest_games.py --year 2026                     # WIN PROBABILITIES, season to date
+python backtest_games.py --year 2026 --start 2026-06-01  # just recent weeks
+python backtest_games.py --year 2025                     # a full past season
+```
+
+The game backtest replays every game pregame — point-in-time player
+profiles, actual starters/lineups (both known before first pitch), bullpen
+availability from prior days' workloads — and scores the win probabilities:
+pick accuracy vs. the always-pick-home baseline, Brier score (coin flip =
+0.250, Vegas closing lines ≈ 0.24), a calibration table (when it says 60%,
+does that side win ~60%?), and whether the bullpen-availability signal
+shows up in results.
+
+```bash
+python backtest.py --year 2025                           # STARTER projections
 ```
 
 Replays every start in the window with point-in-time features (only data
